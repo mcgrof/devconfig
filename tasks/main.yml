@@ -6,7 +6,8 @@
 # Distro agnostic stuff goes below
 
 - name: check if the developer has a git config
-  local_action: stat
+  delegate_to: localhost
+  stat:
     path={{ dev_gitconfig_src }}
   run_once: true
   register: dev_git_config_file
@@ -28,7 +29,8 @@
   when: dev_git_config_file.stat.exists
 
 - name: check if the developer has a configuration file with favorite bash hacks
-  local_action: stat
+  delegate_to: localhost
+  stat:
     path={{ dev_bash_config_hacks_src }}
   register: dev_bash_config_file
 
