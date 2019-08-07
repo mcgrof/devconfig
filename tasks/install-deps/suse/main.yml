@@ -2,5 +2,4 @@
 # Install dependenciesfor oscheck on Red Hat based systems
 - name: Set up apt for Red Hat sources
   zypper:
-     update_cache: yes
-
+    update_cache: yes
