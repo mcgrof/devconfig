@@ -53,6 +53,8 @@
       echo "$SOURCE_BASH_HACKS" >> {{ dev_bash_config }}
       chmod 755 {{ dev_bash_config }}
     fi
+  args:
+    executable: /bin/bash
   when: dev_bash_config_file_copied is success
 
 - name: copy the developer's favorite bash hacks over for root *iff* it exists
@@ -80,4 +82,6 @@
       echo "$SOURCE_BASH_HACKS" >> {{ dev_bash_config_root }}
       chmod 755 {{ dev_bash_config_root }}
     fi
+  args:
+    executable: /bin/bash
   when: dev_bash_config_file_copied_root is success
