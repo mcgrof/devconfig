@@ -1,9 +1,9 @@
 ---
 # tasks to install dependencies
 - name: Distribution ospecific setup
-  import_tasks: tasks/install-deps/debian/main.yml
+  import_tasks: debian/main.yml
   when: ansible_facts['os_family']|lower == 'debian'
-- import_tasks: tasks/install-deps/suse/main.yml
+- import_tasks: suse/main.yml
   when: ansible_facts['os_family']|lower == 'suse'
-- import_tasks: tasks/install-deps/redhat/main.yml
+- import_tasks: redhat/main.yml
   when: ansible_facts['os_family']|lower == 'redhat'

@@ -1,6 +1,7 @@
 ---
 # Distro specific
-- include: tasks/install-deps/main.yml
+- name: Install dependencies
+  import_tasks: install-deps/main.yml
 
 # Distro agnostic stuff goes below
 
