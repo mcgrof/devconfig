@@ -1,30 +1,11 @@
 ---
 - name: Import optional debian specific variables
   include_vars: "{{ item }}"
+  ignore_errors: yes
   with_first_found:
-    files:
-      - "debian.yml"
-    skip: true
+    - files:
+      - "{{ ansible_facts['os_family']|lower }}.yml"
   tags: vars
-  when: ansible_facts['os_family']|lower == 'debian'
-
-- name: Import optional suse specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    files:
-      - "suse.yml"
-    skip: true
-  tags: vars
-  when: ansible_facts['os_family']|lower == 'suse'
-
-- name: Import optional redhat specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    files:
-      - "redhat.yml"
-    skip: true
-  tags: vars
-  when: ansible_facts['os_family']|lower == 'redhat'
 
 # tasks to install dependencies
 - name: Distribution specific setup
