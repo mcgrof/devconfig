@@ -34,6 +34,9 @@ Role Variables
   * dev_bash_config_hacks_dest: where to copy the file to on the target system
   * dev_bash_config_hacks_root: where top copy the hacks file for root
 
+You can also optionally have debian.yml, suse.yml or redhat.yml. Below are
+distro specific variables.
+
   * suse_register_system: if set to true we will try to register your system
   * suse_registration_code: registration code to use
 
