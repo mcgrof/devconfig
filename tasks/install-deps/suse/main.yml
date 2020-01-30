@@ -1,4 +1,21 @@
 ---
+- name: Prepare packages source list and register machine
+  become: yes
+  become_method: sudo
+  script:
+    cmd: {{ role_path }}/scripts/prepare_suse_repos.sh -r {{ suse_registration_code }}
+  when:
+    - suse_register_system|bool
+    - suse_registration_code != 0
+
+- name: Prepare packages source list
+  become: yes
+  become_method: sudo
+  script:
+    cmd: {{ role_path }}/scripts/prepare_suse_repos.sh
+  when:
+    - not suse_register_system|bool
+
 - name: Install packages we typically care about
   become: yes
   become_method: sudo
