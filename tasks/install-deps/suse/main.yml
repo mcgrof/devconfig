@@ -34,7 +34,6 @@
       - gawk
       - bc
       - dump
-      - indent
       - libtool
       - psmisc
       - sed
