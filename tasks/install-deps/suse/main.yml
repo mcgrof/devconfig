@@ -1,5 +1,25 @@
 ---
-# Install dependenciesfor oscheck on Red Hat based systems
-- name: Set up apt for Red Hat sources
+- name: Install packages we typically care about
+  become: yes
+  become_method: sudo
   zypper:
-    update_cache: yes
+    name:
+      - nvme-cli
+      - bison
+      - flex
+      - git
+      - e2fsprogs
+      - xfsprogs
+      - xfsdump
+      - lvm2
+      - gcc
+      - make
+      - gawk
+      - bc
+      - dump
+      - indent
+      - libtool
+      - psmisc
+      - sed
+      - vim
+    state: present
