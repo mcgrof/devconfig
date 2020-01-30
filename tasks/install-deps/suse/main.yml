@@ -24,7 +24,7 @@
       - nvme-cli
       - bison
       - flex
-      - git
+      - git-core
       - e2fsprogs
       - xfsprogs
       - xfsdump
