@@ -19,5 +19,5 @@ dev_bash_config_hacks_generic: "~/.{{ dev_bash_config_hacks_name }}"
 dev_bash_config_hacks_dest: "{{ data_home_dir }}/.{{ dev_bash_config_hacks_name }}"
 dev_bash_config_hacks_root: "/root/.{{ dev_bash_config_hacks_name }}"
 
-suse_register_system: false
+suse_register_system: False
 suse_registration_code: 0

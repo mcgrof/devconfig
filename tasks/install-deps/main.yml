@@ -1,4 +1,12 @@
 ---
+- name: Import optional user secret specific variables
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "secret.yml"
+  tags: vars
+
 - name: Import optional distribution specific variables
   include_vars: "{{ item }}"
   ignore_errors: yes
