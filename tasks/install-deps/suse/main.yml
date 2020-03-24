@@ -5,6 +5,37 @@
     is_leap: '{{ "Leap" in ansible_distribution }}'
     is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
 
+- name: Set SLE specific version labels to make checks easier
+  set_fact:
+    is_sle10: '{{ ansible_distribution_major_version == "10" }}'
+    is_sle11: '{{ ansible_distribution_major_version == "11" }}'
+    is_sle12: '{{ ansible_distribution_major_version == "12" }}'
+    is_sle15: '{{ ansible_distribution_major_version == "15" }}'
+    is_sle10sp3: '{{ ansible_distribution_version == "10.3" }}'
+    is_sle11sp1: '{{ ansible_distribution_version == "11.1" }}'
+    is_sle11sp4: '{{ ansible_distribution_version == "11.4" }}'
+    is_sle12sp1: '{{ ansible_distribution_version == "12.1" }}'
+    is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
+    is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
+  when:
+    - is_sle|bool
+
+- name: Printf if on SLE12-SP1
+  debug:
+    msg: "Buddy you are on SLE12-SP1"
+  when:
+    - is_sle12sp1|bool
+
+- name: The default is to assume all distro supports nvme-utils
+  set_fact:
+    lacks_nvme_utils: false
+
+- name: Does this release lack nvme-utils
+  set_fact:
+    lacks_nvme_utils: true
+  when:
+    - is_sle|bool or is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+
 - name: Verify SLE/SLED systems are being registered
   fail:
     msg: "System is SLE/SLED, must include SUSE registration info on playbooks/secret.yml with suse_register_system and suse_registration_code variables set, refer to devconfig README for more information"
@@ -28,14 +59,23 @@
     cmd: "{{ role_path }}/scripts/prepare_suse_repos.sh"
   when:
     - not suse_register_system|bool
-    - not is_sle
+    - not is_sle|bool
+
+- name: Install nvme tools
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - nvme-cli
+    state: present
+  when:
+    - not lacks_nvme_utils|bool
 
 - name: Install packages we typically care about
   become: yes
   become_method: sudo
   zypper:
     name:
-      - nvme-cli
       - bison
       - flex
       - git-core
