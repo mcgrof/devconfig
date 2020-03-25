@@ -28,7 +28,7 @@
   set_fact:
     lacks_nvme_utils: true
   when:
-    - is_sle|bool or is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
 
 - name: Verify SLE/SLED systems are being registered
   fail:
