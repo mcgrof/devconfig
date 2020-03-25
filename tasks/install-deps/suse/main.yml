@@ -20,6 +20,16 @@
   when:
     - is_sle|bool
 
+- name: The default is to assume we have figured out how to add repos for each
+  set_fact:
+    repos_will_be_added: true
+
+- name: Disable things which require a repo to be set but that cannot be done
+  set_fact:
+    repos_will_be_added: false
+  when:
+    - is_sle10|bool or is_sle11|bool
+
 - name: The default is to assume all distro supports nvme-utils
   set_fact:
     lacks_nvme_utils: false
@@ -54,6 +64,7 @@
   when:
     - not suse_register_system|bool
     - not is_sle|bool
+    - repos_will_be_added|bool
 
 - name: Install nvme tools
   become: yes
@@ -63,6 +74,7 @@
       - nvme-cli
     state: present
   when:
+    - repos_will_be_added|bool
     - not lacks_nvme_utils|bool
 
 - name: Install packages we typically care about
@@ -87,3 +99,5 @@
       - sed
       - vim
     state: present
+  when:
+    - repos_will_be_added|bool
