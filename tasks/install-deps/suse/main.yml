@@ -20,12 +20,6 @@
   when:
     - is_sle|bool
 
-- name: Printf if on SLE12-SP1
-  debug:
-    msg: "Buddy you are on SLE12-SP1"
-  when:
-    - is_sle12sp1|bool
-
 - name: The default is to assume all distro supports nvme-utils
   set_fact:
     lacks_nvme_utils: false
