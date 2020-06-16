@@ -37,7 +37,6 @@
       - git
       - e2fsprogs
       - xfsprogs
-      - xfsdump
       - lvm2
       - gcc
       - make
