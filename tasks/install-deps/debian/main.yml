@@ -36,6 +36,7 @@
       - flex
       - libelf-dev
       - libncurses-dev
+      - screen
       - git
       - e2fsprogs
       - xfsprogs
