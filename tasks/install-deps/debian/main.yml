@@ -35,6 +35,7 @@
       - bison
       - flex
       - libelf-dev
+      - libncurses-dev
       - git
       - e2fsprogs
       - xfsprogs
