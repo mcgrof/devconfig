@@ -34,6 +34,7 @@
       - nvme-cli
       - bison
       - flex
+      - libelf-dev
       - git
       - e2fsprogs
       - xfsprogs
