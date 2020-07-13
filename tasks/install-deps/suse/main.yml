@@ -99,6 +99,7 @@
       - psmisc
       - sed
       - vim
+      - screen
     state: present
   when:
     - repos_will_be_added|bool

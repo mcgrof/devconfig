@@ -51,6 +51,7 @@
       - psmisc
       - sed
       - vim
+      - screen
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]
