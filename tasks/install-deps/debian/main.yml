@@ -51,6 +51,7 @@
       - psmisc
       - sed
       - vim
+      - fio
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]
