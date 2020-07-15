@@ -5,6 +5,7 @@
   with_first_found:
     - files:
       - "secret.yml"
+      skip: true
   tags: vars
 
 - name: Import optional distribution specific variables
@@ -13,6 +14,7 @@
   with_first_found:
     - files:
       - "{{ ansible_facts['os_family']|lower }}.yml"
+      skip: true
   tags: vars
 
 # tasks to install dependencies
