@@ -52,7 +52,7 @@
       - sed
       - vim
       - fio
-      - libaio-devel
+      - libaio-dev
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]
