@@ -28,6 +28,7 @@
   set_fact:
     repos_will_be_added: false
   when:
+    - is_sle|bool
     - is_sle10|bool or is_sle11|bool
 
 - name: The default is to assume all distro supports nvme-utils
@@ -38,6 +39,7 @@
   set_fact:
     lacks_nvme_utils: true
   when:
+    - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
 
 - name: Verify SLE/SLED systems are being registered
