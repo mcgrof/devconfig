@@ -106,6 +106,7 @@
       - libaio-devel
       - diffutils
       - net-tools
+      - ncurses-devel
     state: present
   when:
     - repos_will_be_added|bool
