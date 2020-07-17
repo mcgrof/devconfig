@@ -105,6 +105,7 @@
       - fio
       - libaio-devel
       - diffutils
+      - net-tools
     state: present
   when:
     - repos_will_be_added|bool
