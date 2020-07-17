@@ -104,6 +104,7 @@
       - screen
       - fio
       - libaio-devel
+      - diffutils
     state: present
   when:
     - repos_will_be_added|bool
