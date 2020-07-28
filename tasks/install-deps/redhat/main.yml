@@ -30,3 +30,4 @@
       - diffutils
       - net-tools
       - ncurses-devel
+      - openssh-server

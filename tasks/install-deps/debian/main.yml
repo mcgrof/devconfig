@@ -32,6 +32,7 @@
   apt:
     name:
       - nvme-cli
+      - ssh
       - bison
       - flex
       - libelf-dev
