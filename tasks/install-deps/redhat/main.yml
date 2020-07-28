@@ -1,5 +1,13 @@
 ---
 # Install dependenciesfor oscheck on Red Hat based systems
+- name: Refresh cache and upgrade all present packages
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: '*'
+    state: latest
+
 - name: Install packages we typically care about
   become: yes
   become_method: sudo

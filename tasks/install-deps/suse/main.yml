@@ -69,6 +69,14 @@
     - not is_sle|bool
     - repos_will_be_added|bool
 
+- name: Do full upgrade
+  become: yes
+  become_method: sudo
+  zypper:
+    state: dist-upgrade
+  when:
+    - repos_will_be_added|bool
+
 - name: Install nvme tools
   become: yes
   become_method: sudo

@@ -19,11 +19,12 @@
     warn: no
   tags: [ 'apt', 'release-info-change' ]
 
-- name: Update apt cache
+- name: Update apt cache and do dist-upgrade
   become: yes
   become_method: sudo
   apt:
     update_cache: yes
+    upgrade: full
   tags: [ 'apt', 'cache' ]
 
 - name: Install our generic dependencies
