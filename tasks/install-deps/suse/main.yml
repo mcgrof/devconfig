@@ -69,13 +69,10 @@
     - suse_registration_code != 0
     - is_sle15sp2|bool
 
-- name: Install missing python-xml for releases that need it
+- name: Install missing python-xml for releases that need it manually
   become: yes
   become_method: sudo
-  zypper:
-    name:
-      - python-xml
-    state: present
+  command: "zypper in python-xml"
   when:
     - suse_register_system|bool
     - repos_will_be_added|bool
