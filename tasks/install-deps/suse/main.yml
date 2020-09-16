@@ -59,6 +59,29 @@
     - repos_will_be_added|bool
     - suse_registration_code != 0
 
+- name: Register for python2 module product when needed
+  become: yes
+  become_method: sudo
+  command: "SUSEConnect -p sle-module-python2/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
+  when:
+    - suse_register_system|bool
+    - repos_will_be_added|bool
+    - suse_registration_code != 0
+    - is_sle15sp2|bool
+
+- name: Install missing python-xml for releases that need it
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - python-xml
+    state: present
+  when:
+    - suse_register_system|bool
+    - repos_will_be_added|bool
+    - suse_registration_code != 0
+    - is_sle15sp2|bool
+
 - name: Prepare packages source list
   become: yes
   become_method: sudo
