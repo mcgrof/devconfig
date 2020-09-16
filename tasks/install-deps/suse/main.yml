@@ -44,7 +44,7 @@
 
 - name: Verify SLE/SLED systems are being registered
   fail:
-    msg: "System is SLE/SLED, must include SUSE registration info on playbooks/secret.yml with suse_register_system and suse_registration_code variables set, refer to devconfig README for more information"
+    msg: "System is SLE/SLED, must include SUSE registration info on playbooks/secret.yml with suse_register_system and suse_registration_code variables set."
   when:
     - 'is_sle|bool'
     - 'not suse_register_system|bool'
