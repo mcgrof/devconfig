@@ -72,7 +72,9 @@
 - name: Install missing python-xml for releases that need it manually
   become: yes
   become_method: sudo
-  command: "zypper in python-xml"
+  command:
+    cmd: "zypper in -y python-xml"
+    warn: no
   when:
     - suse_register_system|bool
     - repos_will_be_added|bool
