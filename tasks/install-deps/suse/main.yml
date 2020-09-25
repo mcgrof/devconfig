@@ -31,7 +31,7 @@
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
 
-- name: The default is to assume all distro supports nvme-utils
+- name: The default is to assume all distros supports nvme-utils
   set_fact:
     lacks_nvme_utils: false
 
@@ -41,6 +41,22 @@
   when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+
+- name: The default is to assume all distros have fio on the main repo
+  set_fact:
+    lacks_fio_main_repo: False
+
+# SLES12-SP1 has fio but on ses/2.1/x86_64 repo, and you need another
+# registration key for that. We simply skip fio on it, but only if
+# registering a system. If we use internal repos, it likely *should*
+# be available.
+- name: Does this release lack fio on the main repository
+  set_fact:
+    lacks_fio_main_repo: True
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+    - suse_register_system|bool
 
 - name: Verify SLE/SLED systems are being registered
   fail:
@@ -111,6 +127,17 @@
     - repos_will_be_added|bool
     - not lacks_nvme_utils|bool
 
+- name: Install fio when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - fio
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_fio_main_repo|bool
+
 - name: Install packages we typically care about
   become: yes
   become_method: sudo
@@ -133,7 +160,6 @@
       - sed
       - vim
       - screen
-      - fio
       - libaio-devel
       - diffutils
       - net-tools
