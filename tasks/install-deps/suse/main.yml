@@ -115,6 +115,7 @@
     name: '*'
   when:
     - repos_will_be_added|bool
+    - devconfig_try_upgrade|bool
 
 - name: Install nvme tools
   become: yes
@@ -126,6 +127,7 @@
   when:
     - repos_will_be_added|bool
     - not lacks_nvme_utils|bool
+    - devconfig_try_install_kdevtools|bool
 
 - name: Install fio when possible
   become: yes
@@ -137,6 +139,7 @@
   when:
     - repos_will_be_added|bool
     - not lacks_fio_main_repo|bool
+    - devconfig_try_install_kdevtools|bool
 
 - name: Install packages we typically care about
   become: yes
@@ -168,3 +171,4 @@
     state: present
   when:
     - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool

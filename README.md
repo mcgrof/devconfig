@@ -33,6 +33,9 @@ Role Variables
   * dev_bash_config_hacks_generic: the generic name of the above file
   * dev_bash_config_hacks_dest: where to copy the file to on the target system
   * dev_bash_config_hacks_root: where top copy the hacks file for root
+  * devconfig_try_refresh_repos: try to update your repos?
+  * devconfig_try_upgrade: should we try to update your system?
+  * devconfig_try_install_kdevtools: should we install some kernel hacker tools?
 
 You can also optionally have debian.yml, suse.yml or redhat.yml. Below are
 distro specific variables. Some of these can be distro specific of stuffed

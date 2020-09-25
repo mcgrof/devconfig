@@ -19,5 +19,9 @@ dev_bash_config_hacks_generic: "~/.{{ dev_bash_config_hacks_name }}"
 dev_bash_config_hacks_dest: "{{ data_home_dir }}/.{{ dev_bash_config_hacks_name }}"
 dev_bash_config_hacks_root: "/root/.{{ dev_bash_config_hacks_name }}"
 
+devconfig_try_refresh_repos: False
+devconfig_try_upgrade: False
+devconfig_try_install_kdevtools: False
+
 suse_register_system: False
 suse_registration_code: 0

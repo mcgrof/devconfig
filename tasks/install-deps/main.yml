@@ -17,11 +17,18 @@
       skip: true
   tags: vars
 
-# tasks to install dependencies
+# tasks to setup up repos, register system if needed and install
+# preferred devtools packages.
 - name: Distribution specific setup
   import_tasks: debian/main.yml
-  when: ansible_facts['os_family']|lower == 'debian'
+  when:
+    - ansible_facts['os_family']|lower == 'debian'
+    - devconfig_try_refresh_repos|bool
 - import_tasks: suse/main.yml
-  when: ansible_facts['os_family']|lower == 'suse'
+  when:
+    - ansible_facts['os_family']|lower == 'suse'
+    - devconfig_try_refresh_repos|bool
 - import_tasks: redhat/main.yml
-  when: ansible_facts['os_family']|lower == 'redhat'
+  when:
+    - ansible_facts['os_family']|lower == 'redhat'
+    - devconfig_try_refresh_repos|bool
