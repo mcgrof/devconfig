@@ -18,6 +18,8 @@
   args:
     warn: no
   tags: [ 'apt', 'release-info-change' ]
+  when:
+    - devconfig_try_upgrade|bool
 
 - name: Update apt cache and do dist-upgrade
   become: yes
@@ -26,6 +28,8 @@
     update_cache: yes
     upgrade: full
   tags: [ 'apt', 'cache' ]
+  when:
+    - devconfig_try_upgrade|bool
 
 - name: Install our generic dependencies
   become: yes
@@ -58,3 +62,5 @@
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]
+  when:
+    - devconfig_try_install_kdevtools|bool

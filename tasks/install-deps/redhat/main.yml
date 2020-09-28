@@ -6,6 +6,8 @@
   yum:
     update_cache: yes
     name: '*'
+  when:
+    - devconfig_try_upgrade|bool
 
 - name: Install packages we typically care about
   become: yes
@@ -38,3 +40,5 @@
       - net-tools
       - ncurses-devel
       - openssh-server
+  when:
+    - devconfig_try_install_kdevtools|bool
