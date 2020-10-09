@@ -102,7 +102,7 @@
     lacks_fio_main_repo: True
   when:
     - is_sle|bool
-    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool or is_sle12sp5|bool
     - suse_register_system|bool or devconfig_repos_addon|bool
 
 - name: Verify SLE/SLED systems are being registered
