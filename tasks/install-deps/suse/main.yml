@@ -28,6 +28,18 @@
   set_fact:
     repos_will_be_added: false
   when:
+    - not devconfig_repos_addon|bool
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+
+- name: The default is to assume we are not on sle11 or sle10
+  set_fact:
+    sle10_or_11: false
+
+- name: Are we on SLE11 or SLE10?
+  set_fact:
+    sle10_or_11: true
+  when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
 
@@ -42,6 +54,41 @@
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
 
+- name: The default is to assume all distros supports git-core
+  set_fact:
+    lacks_git_core: false
+
+- name: Does this release lack git-core
+  set_fact:
+    lacks_git_core: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool
+
+- name: Does this release use the package name git assume false
+  set_fact:
+    use_git_package: false
+
+# This needs perl-Error, so fix that first
+- name: Does this release use the package name git
+  set_fact:
+    use_git_package: true
+  when:
+    - is_sle|bool
+    - is_sle12sp3|bool
+    - false
+
+- name: The default is to assume all distros supports xfsdump
+  set_fact:
+    lacks_xfsdump: false
+
+- name: Does this release lack xfsdump
+  set_fact:
+    lacks_xfsdump: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+
 - name: The default is to assume all distros have fio on the main repo
   set_fact:
     lacks_fio_main_repo: False
@@ -55,13 +102,14 @@
     lacks_fio_main_repo: True
   when:
     - is_sle|bool
-    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
-    - suse_register_system|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool
+    - suse_register_system|bool or devconfig_repos_addon|bool
 
 - name: Verify SLE/SLED systems are being registered
   fail:
     msg: "System is SLE/SLED, must include SUSE registration info on playbooks/secret.yml with suse_register_system and suse_registration_code variables set."
   when:
+    - not devconfig_repos_addon|bool
     - 'is_sle|bool'
     - 'not suse_register_system|bool'
 
@@ -85,6 +133,18 @@
     - suse_registration_code != 0
     - is_sle15sp2|bool
 
+- name: Add extra addon repositories when enabled
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh {{ item.url }} {{ item.name }}"
+  with_items:
+    - "{{ devconfig_repos_addon_list }}"
+  loop_control:
+    label: "Adding repo {{ item.name }}"
+  when:
+    - devconfig_repos_addon|bool
+
 - name: Install missing python-xml for releases that need it manually
   become: yes
   become_method: sudo
@@ -92,9 +152,8 @@
     cmd: "zypper in -y python-xml"
     warn: no
   when:
-    - suse_register_system|bool
+    - (suse_register_system|bool and suse_registration_code != 0) or devconfig_repos_addon|bool
     - repos_will_be_added|bool
-    - suse_registration_code != 0
     - is_sle15sp2|bool
 
 - name: Prepare packages source list
@@ -141,34 +200,94 @@
     - not lacks_fio_main_repo|bool
     - devconfig_try_install_kdevtools|bool
 
-- name: Install packages we typically care about
+- name: Install git-core when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - git-core
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_git_core|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install git when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - git
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - use_git_package|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install xfsdump when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - xfsdump
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_xfsdump|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install packages on newer distro when possible
   become: yes
   become_method: sudo
   zypper:
     name:
       - bison
+      - libaio-devel
+      - gcc
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_git_core|bool
+    - devconfig_try_install_kdevtools|bool
+
+# sle12sp3 needs m4 to install flex, fix that first
+- name: Install packages not available on sle11 or sle10
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - dump
       - flex
-      - git-core
+      - ncurses-devel
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not sle10_or_11|bool
+    - not is_sle12sp3|bool
+    - devconfig_try_install_kdevtools|bool
+
+# fix this for sle12sp3
+- name: Install packages we typically care about
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
       - e2fsprogs
       - xfsprogs
-      - xfsdump
       - lvm2
-      - gcc
       - make
       - gawk
-      - bc
-      - dump
       - libtool
       - psmisc
       - sed
       - vim
       - screen
-      - libaio-devel
       - diffutils
       - net-tools
-      - ncurses-devel
       - openssh
+      - bc
     state: present
   when:
+    - not is_sle12sp3|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool

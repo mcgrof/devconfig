@@ -23,5 +23,8 @@ devconfig_try_refresh_repos: False
 devconfig_try_upgrade: False
 devconfig_try_install_kdevtools: False
 
+devconfig_repos_addon: False
+devconfig_repos_addon_list:
+
 suse_register_system: False
 suse_registration_code: 0

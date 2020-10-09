@@ -36,6 +36,8 @@ Role Variables
   * devconfig_try_refresh_repos: try to update your repos?
   * devconfig_try_upgrade: should we try to update your system?
   * devconfig_try_install_kdevtools: should we install some kernel hacker tools?
+  * devconfig_repos_addon: set to true to enable add on repositories
+  * devconfig_repos_addon_list: the list of repositories to use
 
 You can also optionally have debian.yml, suse.yml or redhat.yml. Below are
 distro specific variables. Some of these can be distro specific of stuffed
